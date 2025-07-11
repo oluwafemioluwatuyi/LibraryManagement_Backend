@@ -1,18 +1,18 @@
-﻿using System.Reflection;
-using AutoMapper;
+﻿using AutoMapper;
 using LibraryManagement.DTOs;
 using LibraryManagement.Models;
 namespace LibraryManagement.Helpers
 {
-    public class MappingProfiles : Profile
+    public class MappingProfile : Profile
     {
-        public MappingProfiles()
+        public MappingProfile()
         {
+            Console.WriteLine("AutoMapper MappingProfiles loaded ✅");
             CreateMap<User, UserDto>();
             CreateMap<RegisterRequestDto, User>();
             CreateMap<CreateBookDto, Book>();
             CreateMap<UpdateBookDto, Book>();
-
+            CreateMap<Book, BookDto>();
 
         }
     }

@@ -17,7 +17,7 @@ namespace LibraryManagement.Controllers
             _bookService = bookService;
         }
 
-        [HttpPost("Create")]
+        [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateBookDto createBookDto)
         {
             var response = await _bookService.CreateAsync(createBookDto);

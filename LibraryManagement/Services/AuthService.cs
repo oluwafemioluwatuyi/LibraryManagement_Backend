@@ -21,16 +21,16 @@ namespace LibraryManagement.Services
         private readonly IMapper _mapper;
         private readonly IConstants _constants;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly IEmailService emailService;
+        //private readonly IEmailService emailService;
         private readonly IConfiguration Configuration;
 
-        public AuthService(IUserRepository userRepository, IMapper mapper, IConstants constants, IHttpContextAccessor httpContextAccessor, IEmailService emailService, IConfiguration configuration)
+        public AuthService(IUserRepository userRepository, IMapper mapper, IConstants constants, IHttpContextAccessor httpContextAccessor, IConfiguration configuration)
         {
             _userRepository = userRepository;
             _mapper = mapper;
             _constants = constants;
             _httpContextAccessor = httpContextAccessor;
-            this.emailService = emailService;
+            // this.emailService = emailService;
             Configuration = configuration;
         }
         public async Task<ServiceResponse<object>> RegisterAsync(RegisterRequestDto registerRequestDto)
@@ -180,24 +180,24 @@ namespace LibraryManagement.Services
             return BCrypt.Net.BCrypt.Verify(password, passwordHash);
         }
 
-        private async Task SendVerificationMail(User user, string emailVerificationToken)
-        {
-            try
-            {
-                await emailService.SendHtmlEmailAsync(user.Email, "Verify your email", "VerifyEmail", new
-                {
-                    Name = user.FirstName,
-                    EmailVerificationToken = emailVerificationToken,
-                    UserId = user.Id,
-                    Email = user.Email
-                });
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                Console.WriteLine("Failed to send verification email");
-            }
-        }
+        //     private async Task SendVerificationMail(User user, string emailVerificationToken)
+        //     {
+        //         try
+        //         {
+        //             await emailService.SendHtmlEmailAsync(user.Email, "Verify your email", "VerifyEmail", new
+        //             {
+        //                 Name = user.FirstName,
+        //                 EmailVerificationToken = emailVerificationToken,
+        //                 UserId = user.Id,
+        //                 Email = user.Email
+        //             });
+        //         }
+        //         catch (Exception e)
+        //         {
+        //             Console.WriteLine(e);
+        //             Console.WriteLine("Failed to send verification email");
+        //         }
+        //     }
     }
 }
 

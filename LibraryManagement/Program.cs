@@ -1,6 +1,6 @@
+using AutoMapper;
 using System.ComponentModel;
 using System.Text.Json;
-using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -27,7 +27,19 @@ using System.Text;
 using Newtonsoft.Json;
 using LibraryManagement.Helpers;
 
+
+
+
 var builder = WebApplication.CreateBuilder(args);
+
+// Configure CORS policy
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllOrigins",
+        builder => builder.AllowAnyOrigin()
+                          .AllowAnyMethod()
+                          .AllowAnyHeader());
+});
 
 
 builder.Services.AddControllers(options =>
@@ -134,11 +146,7 @@ builder.Services.AddDbContext<LibraryManagementDbContext>(opt =>
 
 // Ensure you have a MappingProfile class defined in your project, for example in LibraryManagement.Helpers or a similar namespace.
 // If you don't have one, create it as shown below, or replace 'MappingProfile' with the correct profile class name.
-//builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
-
-
-
-
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 
 // builder.Services
@@ -158,21 +166,32 @@ builder.Services.AddScoped<IBookRepository, BookRepository>();
 // Services
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IBookService, BookService>();
+// builder.Services.AddSingleton<IEmailService>(provider =>
+// {
+//     var logger = provider.GetRequiredService<ILogger<EmailService>>();
+//     var environment = provider.GetRequiredService<IWebHostEnvironment>();
 
+//     var templatesFolderPath = Path.Combine(environment.ContentRootPath, "Emails");
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+//     return new EmailService(templatesFolderPath, logger, builder.Configuration);
+// });
+
+// swagger configuration
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+app.UseSwagger();
+app.UseSwaggerUI(c =>
 {
-    app.MapOpenApi();
-}
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "LibraryManagement API v1");
+    c.RoutePrefix = "swagger";
+});
 
 app.UseHttpsRedirection();
+app.UseRouting();
 app.UseAuthentication();
 
 app.UseAuthorization();
