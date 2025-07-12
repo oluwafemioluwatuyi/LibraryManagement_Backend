@@ -22,6 +22,7 @@ namespace LibraryManagement.Seeders
 
         public async Task up()
         {
+            Console.WriteLine("Seeding user...");
             var systemUser = new User
             {
                 FirstName = _constants.SYSTEM_USER_FIRST_NAME,

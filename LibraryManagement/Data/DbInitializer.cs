@@ -5,33 +5,43 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using LibraryManagement.Interfaces;
 using LibraryManagement.Interfaces.Other;
+using LibraryManagement.Seeders;
+using LibraryManagement.Constants;
 
 namespace LibraryManagement.Data;
 
 public class DbInitializer
 {
-    public async static Task InitDb(WebApplication app)
+    private readonly IEnumerable<ISeeder> _seeders;
+
+    public DbInitializer(IEnumerable<ISeeder> seeders)
     {
-        using var scope = app.Services.CreateScope();
+        _seeders = seeders.OrderBy(s => s switch
+        {
+            P_1_UserSeeder => 1,
+            P_2_BookSeeder => 2,
+            _ => 10
+        });
+    }
+    public static void InitializeDatabase(IApplicationBuilder app)
+    {
+        using var scope = app.ApplicationServices.CreateScope();
         var services = scope.ServiceProvider;
 
-        try
+        var context = services.GetRequiredService<LibraryManagementDbContext>();
+        context.Database.Migrate();
+        Console.WriteLine("Database migration completed.");
+        // Check if the database is already seeded
+        if (context.Users.AnyAsync(u => u.Email == services.GetRequiredService<IConstants>().SYSTEM_USER_EMAIL).Result)
         {
-            var context = services.GetRequiredService<LibraryManagementDbContext>();
-            await context.Database.MigrateAsync();
-
-            var seederHandler = services.GetRequiredService<ISeederHandler>();
-            await SeedData(seederHandler);
+            Console.WriteLine($"Database already seeded (system user found). Skipping seeding.");
+            return;
         }
-        catch (Exception ex)
+
+        var initializer = services.GetRequiredService<DbInitializer>();
+        foreach (var seeder in initializer._seeders)
         {
-            // Log the error (use a logging framework like Serilog or NLog)
-            Console.WriteLine($"An error occurred while migrating or seeding the database: {ex.Message}");
+            seeder.up().Wait();
         }
-    }
-
-    private async static Task SeedData(ISeederHandler seederHandler)
-    {
-        await seederHandler.seed();
     }
 }

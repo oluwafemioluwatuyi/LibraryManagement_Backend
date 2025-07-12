@@ -3,7 +3,6 @@ using LibraryManagement.Interfaces.Other;
 using LibraryManagement.Interfaces.Repositories;
 using LibraryManagement.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 
 namespace LibraryManagement.Repositories
 {
@@ -28,7 +27,7 @@ namespace LibraryManagement.Repositories
                 .FirstOrDefaultAsync(u => u.Email == email);
         }
 
-        public async Task<User?> GetByIdAsync(Guid userId)
+        public async Task<User?> GetByIdAsync(int userId)
         {
             return await _dbContext.Users
                 .FirstOrDefaultAsync(u => u.Id == userId);

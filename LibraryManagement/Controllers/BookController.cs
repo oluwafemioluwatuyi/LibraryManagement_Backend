@@ -2,6 +2,7 @@
 using LibraryManagement.DTOs.SearchParams;
 using LibraryManagement.Helpers;
 using LibraryManagement.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryManagement.Controllers
@@ -17,6 +18,7 @@ namespace LibraryManagement.Controllers
             _bookService = bookService;
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateBookDto createBookDto)
         {
@@ -24,6 +26,7 @@ namespace LibraryManagement.Controllers
             return ControllerHelper.HandleApiResponse(response);
         }
 
+        [Authorize]
         [HttpGet]
 
         public async Task<IActionResult> GetAll([FromQuery] SearchParams searchParams)
@@ -31,7 +34,7 @@ namespace LibraryManagement.Controllers
             var response = await _bookService.GetAllAsync(searchParams.SearchTerm, searchParams.PageNumber, searchParams.PageSize);
             return ControllerHelper.HandleApiResponse(response);
         }
-
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -39,12 +42,14 @@ namespace LibraryManagement.Controllers
             return ControllerHelper.HandleApiResponse(response);
 
         }
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] UpdateBookDto updateBookDto)
         {
             var response = await _bookService.UpdateAsync(id, updateBookDto);
             return ControllerHelper.HandleApiResponse(response);
         }
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

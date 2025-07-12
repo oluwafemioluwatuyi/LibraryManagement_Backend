@@ -5,7 +5,6 @@ namespace LibraryManagement.Constants
     public class Constants : IConstants
     {
 
-
         public string SYSTEM_USER_EMAIL { get; } = "system@system.com";
 
         public string SYSTEM_USER_FIRST_NAME { get; } = "SYSTEM";

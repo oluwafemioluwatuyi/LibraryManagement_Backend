@@ -39,7 +39,7 @@ namespace LibraryManagement.Services
             // Checking if user doesn't already exists with that email
             var alreadyExistingUser = await _userRepository.GetByEmailAsync(registerRequestDto.Email);
 
-            if (alreadyExistingUser != null && alreadyExistingUser.EmailConfirmed)
+            if (alreadyExistingUser != null)
             {
                 return new ServiceResponse<object>(ResponseStatus.BadRequest, AppStatusCodes.AlreadyExists, "User already exists", null);
             }
@@ -51,7 +51,7 @@ namespace LibraryManagement.Services
                 // Map from dto to user model
                 user = _mapper.Map<User>(registerRequestDto);
 
-                user.Id = Guid.NewGuid();
+                //user.Id = Guid.NewGuid();
 
                 // Hashing the password before saving in the database
                 user.Password = HashPassword(registerRequestDto.Password);
@@ -115,10 +115,10 @@ namespace LibraryManagement.Services
             }
             ;
 
-            if (!user.EmailConfirmed)
-            {
-                return new ServiceResponse<object>(ResponseStatus.BadRequest, AppStatusCodes.EmailNotVerified, "Email yet to be verified", null);
-            }
+            // if (user.EmailConfirmed is null)
+            // {
+            //     return new ServiceResponse<object>(ResponseStatus.BadRequest, AppStatusCodes.EmailNotVerified, "Email yet to be verified", null);
+            // }
 
             // Creating JWT
             string token = CreateJwtToken(user);

@@ -7,7 +7,6 @@ namespace LibraryManagement.Helpers
     {
         public MappingProfile()
         {
-            Console.WriteLine("AutoMapper MappingProfiles loaded ✅");
             CreateMap<User, UserDto>();
             CreateMap<RegisterRequestDto, User>();
             CreateMap<CreateBookDto, Book>();

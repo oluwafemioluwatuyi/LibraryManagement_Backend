@@ -1,7 +1,6 @@
 ﻿using LibraryManagement.Data;
 using LibraryManagement.DTOs.SearchParams;
 using LibraryManagement.Interfaces.Repositories;
-using LibraryManagement.Interfaces.Services;
 using LibraryManagement.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,12 +18,12 @@ namespace LibraryManagement.Repositories
             _dbContext.Books.Add(book);
         }
 
-        public async Task<IEnumerable<Book>> GetAllAsync(SearchParams searchParams, Guid? userId)
+        public async Task<IEnumerable<Book>> GetAllAsync(SearchParams searchParams, int? userId)
         {
             var query = _dbContext.Books.AsQueryable();
 
             // 1. Filter by the logged-in user
-            query = query.Where(b => b.UserId == userId);
+            // query = query.Where(b => b.UserId == userId);
 
             // Search by title or author
             if (!string.IsNullOrWhiteSpace(searchParams.SearchTerm))

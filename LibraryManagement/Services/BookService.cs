@@ -5,8 +5,6 @@ using AutoMapper;
 using LibraryManagement.Constants;
 using LibraryManagement.DTOs;
 using LibraryManagement.DTOs.SearchParams;
-
-// Ensure BookDto exists in LibraryManagement.DTOs namespace
 using LibraryManagement.Helpers;
 using LibraryManagement.Interfaces.Repositories;
 using LibraryManagement.Interfaces.Services;
@@ -41,7 +39,7 @@ namespace LibraryManagement.Services
                 return new ServiceResponse<object>(ResponseStatus.BadRequest, AppStatusCodes.ResourceNotFound, "User does not exist", null);
             }
 
-            // 2. Check for duplicate book by ISBN
+            //  Check for duplicate book by ISBN
             var searchParams = new SearchParams
             {
                 SearchTerm = createBookDto.ISBN,
@@ -51,7 +49,7 @@ namespace LibraryManagement.Services
 
             var existingBooks = await bookRepository.GetAllAsync(searchParams, userId);
 
-            // 3. Check exact match (since search is fuzzy)
+            //  Check exact match (since search is fuzzy)
             if (existingBooks.Any(b => b.ISBN.Equals(createBookDto.ISBN, StringComparison.OrdinalIgnoreCase)))
             {
                 return new ServiceResponse<object>(
@@ -62,10 +60,10 @@ namespace LibraryManagement.Services
                 );
             }
 
-            // 4. Map DTO to Book entity
+            //  Map DTO to Book entity
             var book = mapper.Map<Book>(createBookDto);
 
-            // 5. Save the book
+            //  Save the book
             bookRepository.Add(book);
             var success = await bookRepository.SaveChangesAsync();
 
@@ -79,7 +77,7 @@ namespace LibraryManagement.Services
                 );
             }
 
-            // 6. Return mapped DTO
+            //  Return mapped DTO
             var bookDto = mapper.Map<BookDto>(book);
 
             return new ServiceResponse<object>(
@@ -120,17 +118,17 @@ namespace LibraryManagement.Services
             }
 
             // Check if the logged-in user is the creator of the book
-            if (book.UserId != user.Id)
-            {
-                return new ServiceResponse<bool>(
-                    ResponseStatus.Unauthorized,
-                    AppStatusCodes.Unauthorized,
-                    "You are not authorized to delete this book.",
-                    false
-                );
-            }
+            // if (book.UserId != user.Id)
+            // {
+            //     return new ServiceResponse<bool>(
+            //         ResponseStatus.Unauthorized,
+            //         AppStatusCodes.Unauthorized,
+            //         "You are not authorized to delete this book.",
+            //         false
+            //     );
+            // }
 
-            // 5. Delete the book
+            //  Delete the book
             bookRepository.Remove(book);
             var success = await bookRepository.SaveChangesAsync();
 
@@ -154,10 +152,10 @@ namespace LibraryManagement.Services
 
         public async Task<ServiceResponse<IEnumerable<object>>> GetAllAsync(string? search = null, int pageNumber = 1, int pageSize = 10)
         {
-            // 1. Get logged-in user ID
+            //  Get logged-in user ID
             var userId = httpContextAccessor.HttpContext.User.GetLoggedInUserId();
 
-            // 2. Get the user from the database
+            //  Get the user from the database
             var user = await userRepository.GetByIdAsync(userId);
             if (user is null)
             {
@@ -169,7 +167,7 @@ namespace LibraryManagement.Services
                 );
             }
 
-            // 3. Construct SearchParams manually
+            //  Construct SearchParams manually
             var searchParams = new SearchParams
             {
                 SearchTerm = search?.Trim() ?? string.Empty,
@@ -177,10 +175,10 @@ namespace LibraryManagement.Services
                 PageSize = pageSize > 0 ? Math.Min(pageSize, 50) : 10
             };
 
-            // 4. Query the repository
+            //  Query the repository
             var books = await bookRepository.GetAllAsync(searchParams, userId);
 
-            // 5. Map to DTOs
+            //  Map to DTOs
             var bookDtos = mapper.Map<IEnumerable<BookDto>>(books);
 
             // 6. Wrap and return response
@@ -194,10 +192,10 @@ namespace LibraryManagement.Services
 
         public async Task<ServiceResponse<object>> GetByIdAsync(int id)
         {
-            // 1. Get logged-in user ID from claims
+            //  Get logged-in user ID from claims
             var userId = httpContextAccessor.HttpContext.User.GetLoggedInUserId();
 
-            // 2. Get the user from the database
+            // Get the user from the database
             var user = await userRepository.GetByIdAsync(userId);
             if (user is null)
             {
@@ -209,7 +207,7 @@ namespace LibraryManagement.Services
                 );
             }
 
-            // 3. Retrieve the book
+            //  Retrieve the book
             var book = await bookRepository.GetByIdAsync(id);
             if (book is null)
             {
@@ -222,20 +220,19 @@ namespace LibraryManagement.Services
             }
 
             // 4. Ensure the user owns the book
-            if (book.UserId != user.Id)
-            {
-                return new ServiceResponse<object>(
-                    ResponseStatus.Unauthorized,
-                    AppStatusCodes.Unauthorized,
-                    "You are not authorized to view this book.",
-                    null
-                );
-            }
+            // if (book.UserId != user.Id)
+            // {
+            //     return new ServiceResponse<object>(
+            //         ResponseStatus.Unauthorized,
+            //         AppStatusCodes.Unauthorized,
+            //         "You are not authorized to view this book.",
+            //         null
+            //     );
+            // }
 
-            // 5. Map to DTO
+            //  Map to DTO
             var bookDto = mapper.Map<BookDto>(book);
 
-            // 6. Return response
             return new ServiceResponse<object>(
                 ResponseStatus.Success,
                 AppStatusCodes.Success,
@@ -246,10 +243,8 @@ namespace LibraryManagement.Services
 
         public async Task<ServiceResponse<object>> UpdateAsync(int id, UpdateBookDto dto)
         {
-            // 1. Get logged-in user ID
             var userId = httpContextAccessor.HttpContext.User.GetLoggedInUserId();
 
-            // 2. Get user from database
             var user = await userRepository.GetByIdAsync(userId);
             if (user is null)
             {
@@ -261,7 +256,7 @@ namespace LibraryManagement.Services
                 );
             }
 
-            // 3. Get book to update
+            //  Get book to update
             var book = await bookRepository.GetByIdAsync(id);
             if (book is null)
             {
@@ -274,15 +269,15 @@ namespace LibraryManagement.Services
             }
 
             // check if the user is authorized to delete the resources
-            if (book.UserId != user.Id)
-            {
-                return new ServiceResponse<object>(
-                    ResponseStatus.Unauthorized,
-                    AppStatusCodes.Unauthorized,
-                    "You are not authorized to update this book.",
-                    null
-                );
-            }
+            // if (book.UserId != user.Id)
+            // {
+            //     return new ServiceResponse<object>(
+            //         ResponseStatus.Unauthorized,
+            //         AppStatusCodes.Unauthorized,
+            //         "You are not authorized to update this book.",
+            //         null
+            //     );
+            // }
 
             // ap update fields (preserve ID and user info)
             mapper.Map(dto, book);

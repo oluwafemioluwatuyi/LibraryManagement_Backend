@@ -14,8 +14,8 @@ namespace LibraryManagement.Data
             base.OnModelCreating(modelBuilder);
         }
 
-        public DbSet<User> Users;
-        public DbSet<Book> Books;
+        public DbSet<User> Users { get; set; }
+        public DbSet<Book> Books { get; set; }
 
     }
 }

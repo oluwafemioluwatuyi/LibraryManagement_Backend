@@ -15,6 +15,8 @@ namespace LibraryManagement.Seeders
         }
         public Task up()
         {
+            Console.WriteLine("Seeding books...");
+
             var books = new List<Book>
             {
                 new Book
@@ -23,8 +25,6 @@ namespace LibraryManagement.Seeders
                     Author = "F. Scott Fitzgerald",
                     ISBN = "9780743273565",
                     PublishedDate = new DateTime(1925, 4, 10),
-                    UserId = Guid.Parse("00000000-0000-0000-0000-000000000001")
-                    // Assuming this is the system user ID
 
                 }
             };
