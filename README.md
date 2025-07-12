@@ -41,15 +41,22 @@ cd LibraryManagement
 
 ```
 
-#### 2. Configure the Database Connection
+#### 2. Configure appsettings.json
 
 ```bash
 {
-  "ConnectionStrings": {
-    "DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=LibraryManagement;Trusted_Connection=True;MultipleActiveResultSets=true"
+    "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
   },
+  "ConnectionStrings": {
+    "SQLServerDatabase": "Server=localhost,1433;User Id=sa;Password=<Your-SQL-Server-Password>;Database=LibraryManagement;Encrypt=True;TrustServerCertificate=True;"
+  },
+
   "JWT": {
-    "Token": "your-secure-key-here" // Replace with a secure key for JWT signing
+    "Token": "your token"
   }
 }
 
