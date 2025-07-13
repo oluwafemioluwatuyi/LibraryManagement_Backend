@@ -51,8 +51,6 @@ namespace LibraryManagement.Services
                 // Map from dto to user model
                 user = _mapper.Map<User>(registerRequestDto);
 
-                //user.Id = Guid.NewGuid();
-
                 // Hashing the password before saving in the database
                 user.Password = HashPassword(registerRequestDto.Password);
             }
@@ -91,13 +89,7 @@ namespace LibraryManagement.Services
                 user = _mapper.Map<UserDto>(user)
             });
 
-
-
         }
-
-
-
-
 
         public async Task<ServiceResponse<object>> LoginAsync(LoginDto loginDto)
         {
@@ -132,12 +124,6 @@ namespace LibraryManagement.Services
                 user = userDto
             });
         }
-
-
-
-
-
-
         private string CreateJwtToken(User user)
         {
 

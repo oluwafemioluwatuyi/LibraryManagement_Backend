@@ -116,18 +116,6 @@ namespace LibraryManagement.Services
                     false
                 );
             }
-
-            // Check if the logged-in user is the creator of the book
-            // if (book.UserId != user.Id)
-            // {
-            //     return new ServiceResponse<bool>(
-            //         ResponseStatus.Unauthorized,
-            //         AppStatusCodes.Unauthorized,
-            //         "You are not authorized to delete this book.",
-            //         false
-            //     );
-            // }
-
             //  Delete the book
             bookRepository.Remove(book);
             var success = await bookRepository.SaveChangesAsync();
@@ -218,18 +206,6 @@ namespace LibraryManagement.Services
                     null
                 );
             }
-
-            // 4. Ensure the user owns the book
-            // if (book.UserId != user.Id)
-            // {
-            //     return new ServiceResponse<object>(
-            //         ResponseStatus.Unauthorized,
-            //         AppStatusCodes.Unauthorized,
-            //         "You are not authorized to view this book.",
-            //         null
-            //     );
-            // }
-
             //  Map to DTO
             var bookDto = mapper.Map<BookDto>(book);
 
@@ -267,17 +243,6 @@ namespace LibraryManagement.Services
                     null
                 );
             }
-
-            // check if the user is authorized to delete the resources
-            // if (book.UserId != user.Id)
-            // {
-            //     return new ServiceResponse<object>(
-            //         ResponseStatus.Unauthorized,
-            //         AppStatusCodes.Unauthorized,
-            //         "You are not authorized to update this book.",
-            //         null
-            //     );
-            // }
 
             // ap update fields (preserve ID and user info)
             mapper.Map(dto, book);
