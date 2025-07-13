@@ -26,6 +26,27 @@ namespace LibraryManagement.Seeders
                     ISBN = "9780743273565",
                     PublishedDate = new DateTime(1925, 4, 10),
 
+                },
+                 new Book
+                {
+                    Title = "To Kill a Mockingbird",
+                    Author = "Harper Lee",
+                    ISBN = "9780061120084",
+                    PublishedDate = new DateTime(1960, 7, 11)
+                },
+                new Book
+                {
+                    Title = "1984",
+                    Author = "George Orwell",
+                    ISBN = "9780451524935",
+                    PublishedDate = new DateTime(1949, 6, 8)
+                },
+                new Book
+                {
+                    Title = "Pride and Prejudice",
+                    Author = "Jane Austen",
+                    ISBN = "9780141439518",
+                    PublishedDate = new DateTime(1813, 1, 28)
                 }
             };
 
