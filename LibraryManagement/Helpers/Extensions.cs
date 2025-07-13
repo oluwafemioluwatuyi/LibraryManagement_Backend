@@ -1,8 +1,6 @@
 using System;
 using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
 using LibraryManagement.Middlewares;
 
 namespace LibraryManagement.Helpers

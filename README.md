@@ -1,4 +1,4 @@
-# 📚 Library Management System
+# Library Management System
 
 An ASP.NET Core Web API for managing a collection of books with secure, JWT-protected endpoints. This system allows registered users to perform CRUD operations on books.
 
